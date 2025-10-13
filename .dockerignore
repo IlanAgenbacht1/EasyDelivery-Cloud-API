@@ -1,0 +1,54 @@
+# .dockerignore
+
+# Git files
+.git/
+.gitignore
+
+# Build output directories
+bin/
+obj/
+
+# Debug and release directories
+**/bin/
+**/obj/
+
+# Visual Studio directories
+.vs/
+.vscode/
+
+# NuGet packages folder
+packages/
+
+# MSTest test Results
+TestResults/
+
+# Build Results of an ATL Project
+[Dd]ebugPS/
+[Rr]eleasePS/
+
+# .NET Core build outputs
+*.dll
+*.exe
+*.pdb
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp

@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>DeliveryCloudApi</AssemblyName>
+    <RootNamespace>DeliveryCloudApi</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Swagger for API documentation -->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
+    
+    <!-- Firestore -->
+    <PackageReference Include="Google.Cloud.Firestore" Version="3.7.0" />
+    
+    <!-- SQL Server (for Sage 300 connectivity) -->
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    
+    <!-- JSON handling -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
+    
+    <!-- Google Cloud Pub/Sub (still needed for potential message publishing) -->
+    <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
