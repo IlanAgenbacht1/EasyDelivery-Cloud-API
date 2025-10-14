@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <!-- Swagger for API documentation -->
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="QuestPDF" Version="2025.7.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
     
     <!-- Firestore -->

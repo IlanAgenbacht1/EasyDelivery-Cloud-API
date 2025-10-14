@@ -12,6 +12,9 @@ namespace DeliveryCloudApi.Models
     [FirestoreData]
     public class Client
     {
+        // Document ID is used as ClientId (not stored as Firestore property)
+        public string ClientId { get; set; } = string.Empty;
+        
         [FirestoreProperty("clientName")]
         public string ClientName { get; set; } = string.Empty;
 
@@ -137,6 +140,98 @@ namespace DeliveryCloudApi.Models
     }
 
     /// <summary>
+    /// Driver collection - for mobile app authentication
+    /// Document ID: driverId (e.g., "driver1", "driver2")
+    /// </summary>
+    [FirestoreData]
+    public class Driver
+    {
+        [FirestoreProperty("name")]
+        public string Name { get; set; } = string.Empty;
+
+        [FirestoreProperty("clientId")]
+        public string ClientId { get; set; } = string.Empty;
+
+        [FirestoreProperty("pinHash")]
+        public string PinHash { get; set; } = string.Empty; // Empty until PIN is set up
+
+        [FirestoreProperty("isActive")]
+        public bool IsActive { get; set; } = true;
+
+        [FirestoreProperty("createdAt")]
+        public DateTime CreatedAt { get; set; }
+    }
+
+    /// <summary>
+    /// Device collection - for device registration and approval
+    /// Document ID: deviceId (device UID)
+    /// </summary>
+    [FirestoreData]
+    public class Device
+    {
+        [FirestoreProperty("clientId")]
+        public string ClientId { get; set; } = string.Empty;
+
+        [FirestoreProperty("deviceType")]
+        public string DeviceType { get; set; } = string.Empty; // "tablet", "phone", etc.
+
+        [FirestoreProperty("isApproved")]
+        public bool IsApproved { get; set; } = false;
+
+        [FirestoreProperty("lastSeenAt")]
+        public DateTime LastSeenAt { get; set; }
+
+        [FirestoreProperty("registeredAt")]
+        public DateTime RegisteredAt { get; set; }
+    }
+
+    /// <summary>
+    /// Vehicle collection - vehicle registration info
+    /// Document ID: vehicleId (registration number)
+    /// </summary>
+    [FirestoreData]
+    public class Vehicle
+    {
+        [FirestoreProperty("registrationNumber")]
+        public string RegistrationNumber { get; set; } = string.Empty;
+
+        [FirestoreProperty("clientId")]
+        public string ClientId { get; set; } = string.Empty;
+
+        [FirestoreProperty("createdAt")]
+        public DateTime CreatedAt { get; set; }
+    }
+
+    /// <summary>
+    /// Session collection - active driver sessions
+    /// Document ID: sessionId (unique session identifier)
+    /// </summary>
+    [FirestoreData]
+    public class Session
+    {
+        [FirestoreProperty("driverId")]
+        public string DriverId { get; set; } = string.Empty;
+
+        [FirestoreProperty("deviceId")]
+        public string DeviceId { get; set; } = string.Empty;
+
+        [FirestoreProperty("clientId")]
+        public string ClientId { get; set; } = string.Empty;
+
+        [FirestoreProperty("vehicleId")]
+        public string VehicleId { get; set; } = string.Empty;
+
+        [FirestoreProperty("createdAt")]
+        public DateTime CreatedAt { get; set; }
+
+        [FirestoreProperty("lastActiveAt")]
+        public DateTime LastActiveAt { get; set; }
+
+        [FirestoreProperty("isActive")]
+        public bool IsActive { get; set; } = true;
+    }
+
+    /// <summary>
     /// For tracking processed shipments from Sage 300 (internal state management)
     /// Collection: processed-shipments
     /// Document ID: clientId-SHIUNIQ (e.g., "dev-12345")
@@ -161,6 +256,191 @@ namespace DeliveryCloudApi.Models
 
         [FirestoreProperty("processedDate")]
         public DateTime ProcessedDate { get; set; }
+    }
+
+    /// <summary>
+    /// FileMetadata collection - for tracking uploaded files
+    /// Document ID: fileId (unique file identifier)
+    /// </summary>
+    [FirestoreData]
+    public class FileMetadata
+    {
+        [FirestoreProperty("fileName")]
+        public string FileName { get; set; } = string.Empty;
+
+        [FirestoreProperty("originalFileName")]
+        public string OriginalFileName { get; set; } = string.Empty;
+
+        [FirestoreProperty("contentType")]
+        public string ContentType { get; set; } = string.Empty;
+
+        [FirestoreProperty("fileSize")]
+        public long FileSize { get; set; }
+
+        [FirestoreProperty("fileType")]
+        public string FileType { get; set; } = string.Empty; // "signature", "photo", "document"
+
+        [FirestoreProperty("uploadedBy")]
+        public string UploadedBy { get; set; } = string.Empty; // DriverId
+
+        [FirestoreProperty("uploadedFrom")]
+        public string UploadedFrom { get; set; } = string.Empty; // DeviceId
+
+        [FirestoreProperty("clientId")]
+        public string ClientId { get; set; } = string.Empty;
+
+        [FirestoreProperty("tripId")]
+        public string TripId { get; set; } = string.Empty;
+
+        [FirestoreProperty("deliveryId")]
+        public string DeliveryId { get; set; } = string.Empty;
+
+        [FirestoreProperty("uploadedAt")]
+        public DateTime UploadedAt { get; set; }
+
+        [FirestoreProperty("isActive")]
+        public bool IsActive { get; set; } = true;
+
+        [FirestoreProperty("filePath")]
+        public string FilePath { get; set; } = string.Empty; // Storage path
+
+        [FirestoreProperty("publicUrl")]
+        public string PublicUrl { get; set; } = string.Empty; // Public access URL if needed
+    }
+
+    /// <summary>
+    /// POD Document collection - for tracking generated POD PDFs
+    /// Document ID: podDocumentId (unique POD document identifier)
+    /// </summary>
+    [FirestoreData]
+    public class PodDocument
+    {
+        [FirestoreProperty("deliveryId")]
+        public string DeliveryId { get; set; } = string.Empty;
+
+        [FirestoreProperty("tripId")]
+        public string TripId { get; set; } = string.Empty;
+
+        [FirestoreProperty("clientId")]
+        public string ClientId { get; set; } = string.Empty;
+
+        [FirestoreProperty("fileName")]
+        public string FileName { get; set; } = string.Empty;
+
+        [FirestoreProperty("filePath")]
+        public string FilePath { get; set; } = string.Empty;
+
+        [FirestoreProperty("fileSize")]
+        public long FileSize { get; set; }
+
+        [FirestoreProperty("generatedAt")]
+        public DateTime GeneratedAt { get; set; }
+
+        [FirestoreProperty("generatedBy")]
+        public string GeneratedBy { get; set; } = string.Empty; // DriverId or "system"
+
+        [FirestoreProperty("hasSignature")]
+        public bool HasSignature { get; set; }
+
+        [FirestoreProperty("hasPhoto")]
+        public bool HasPhoto { get; set; }
+
+        [FirestoreProperty("publicUrl")]
+        public string PublicUrl { get; set; } = string.Empty;
+
+        [FirestoreProperty("isActive")]
+        public bool IsActive { get; set; } = true;
+    }
+
+    /// <summary>
+    /// Client Email Configuration - per-client email settings
+    /// Document ID: clientId
+    /// </summary>
+    [FirestoreData]
+    public class ClientEmailConfig
+    {
+        [FirestoreProperty("clientId")]
+        public string ClientId { get; set; } = string.Empty;
+
+        [FirestoreProperty("smtpHost")]
+        public string SmtpHost { get; set; } = string.Empty;
+
+        [FirestoreProperty("smtpPort")]
+        public int SmtpPort { get; set; } = 587;
+
+        [FirestoreProperty("smtpUsername")]
+        public string SmtpUsername { get; set; } = string.Empty;
+
+        [FirestoreProperty("smtpPassword")]
+        public string SmtpPassword { get; set; } = string.Empty; // Should be encrypted
+
+        [FirestoreProperty("fromEmail")]
+        public string FromEmail { get; set; } = string.Empty;
+
+        [FirestoreProperty("fromName")]
+        public string FromName { get; set; } = string.Empty;
+
+        [FirestoreProperty("adminEmails")]
+        public List<string> AdminEmails { get; set; } = new(); // Copy recipients
+
+        [FirestoreProperty("enableSsl")]
+        public bool EnableSsl { get; set; } = true;
+
+        [FirestoreProperty("isActive")]
+        public bool IsActive { get; set; } = true;
+
+        [FirestoreProperty("createdAt")]
+        public DateTime CreatedAt { get; set; }
+
+        [FirestoreProperty("updatedAt")]
+        public DateTime UpdatedAt { get; set; }
+    }
+
+    /// <summary>
+    /// Email Log collection - track sent emails
+    /// Document ID: emailLogId (unique identifier)
+    /// </summary>
+    [FirestoreData]
+    public class EmailLog
+    {
+        [FirestoreProperty("deliveryId")]
+        public string DeliveryId { get; set; } = string.Empty;
+
+        [FirestoreProperty("tripId")]
+        public string TripId { get; set; } = string.Empty;
+
+        [FirestoreProperty("clientId")]
+        public string ClientId { get; set; } = string.Empty;
+
+        [FirestoreProperty("emailType")]
+        public string EmailType { get; set; } = string.Empty; // "customer", "admin", "driver"
+
+        [FirestoreProperty("recipient")]
+        public string Recipient { get; set; } = string.Empty;
+
+        [FirestoreProperty("subject")]
+        public string Subject { get; set; } = string.Empty;
+
+        [FirestoreProperty("status")]
+        public string Status { get; set; } = string.Empty; // "queued", "sent", "failed"
+
+        [FirestoreProperty("sentAt")]
+        public DateTime? SentAt { get; set; }
+
+        [FirestoreProperty("errorMessage")]
+        public string ErrorMessage { get; set; } = string.Empty;
+
+        [FirestoreProperty("retryCount")]
+        public int RetryCount { get; set; } = 0;
+
+        [FirestoreProperty("createdAt")]
+        public DateTime CreatedAt { get; set; }
+
+        [FirestoreProperty("hasPodAttachment")]
+        public bool HasPodAttachment { get; set; }
+
+        [FirestoreProperty("initiatedBy")]
+        public string InitiatedBy { get; set; } = string.Empty; // DriverId or "system"
     }
 
     /// <summary>
