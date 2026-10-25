@@ -1,0 +1,6 @@
+
+# Build output
+bin/
+obj/
+# Never commit credentials, encrypted or not
+Generated/CompiledServiceAccount.cs
